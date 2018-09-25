@@ -43,6 +43,7 @@
 #include "drivers/rangefinder/rangefinder.h"
 #include "drivers/rangefinder/rangefinder_hcsr04.h"
 #include "drivers/rangefinder/rangefinder_lidartf.h"
+#include "drivers/rangefinder/rangefinder_vl53l0x.h"
 
 #include "fc/config.h"
 #include "fc/runtime_config.h"
@@ -262,7 +263,7 @@ static int16_t computePseudoSnr(int32_t newReading) {
  * This is called periodically by the scheduler
  */
 // XXX Returns timeDelta_t for iNav for pseudo-RT scheduling.
-void rangefinderUpdate(timeUs_t currentTimeUs)
+timeDelta_t rangefinderUpdate(timeUs_t currentTimeUs)
 {
     UNUSED(currentTimeUs);
 
@@ -270,7 +271,7 @@ void rangefinderUpdate(timeUs_t currentTimeUs)
         rangefinder.dev.update(&rangefinder.dev);
     }
 
-    // return rangefinder.dev.delayMs * 1000;  // to microseconds XXX iNav only
+    return rangefinder.dev.delayMs * 1000;  // to microseconds XXX iNav only
 }
 
 bool isSurfaceAltitudeValid() {

@@ -208,6 +208,27 @@ static void taskTelemetry(timeUs_t currentTimeUs)
 }
 #endif
 
+#ifdef USE_RANGEFINDER
+void taskUpdateRangefinder(timeUs_t currentTimeUs)
+{
+    if (!sensors(SENSOR_RANGEFINDER))
+        return;
+
+    // Update and adjust task to update at required rate
+    const uint32_t newDeadline = rangefinderUpdate(currentTimeUs);
+    if (newDeadline != 0) {
+        rescheduleTask(TASK_SELF, newDeadline);
+    }
+
+    /*
+     * Process raw rangefinder readout
+     */
+    if (rangefinderProcess(getCosTiltAngle())) {
+        //updatePositionEstimator_SurfaceTopic(currentTimeUs, rangefinderGetLatestAltitude());
+    }
+}
+#endif
+
 #ifdef USE_CAMERA_CONTROL
 static void taskCameraControl(uint32_t currentTime)
 {
@@ -283,6 +304,10 @@ void fcTasksInit(void)
 
 #if defined(USE_BARO) || defined(USE_GPS)
     setTaskEnabled(TASK_ALTITUDE, sensors(SENSOR_BARO) || featureIsEnabled(FEATURE_GPS));
+#endif
+
+#ifdef USE_RANGEFINDER
+    setTaskEnabled(TASK_RANGEFINDER, sensors(SENSOR_RANGEFINDER));
 #endif
 
 #ifdef USE_DASHBOARD
@@ -485,6 +510,15 @@ cfTask_t cfTasks[TASK_COUNT] = {
         .taskFunc = taskUpdateBaro,
         .desiredPeriod = TASK_PERIOD_HZ(20),
         .staticPriority = TASK_PRIORITY_LOW,
+    },
+#endif
+
+#ifdef USE_RANGEFINDER
+    [TASK_RANGEFINDER] = {
+        .taskName = "RANGEFINDER",
+        .taskFunc = taskUpdateRangefinder,
+        .desiredPeriod = TASK_PERIOD_MS(70),
+        .staticPriority = TASK_PRIORITY_MEDIUM,
     },
 #endif
 

@@ -130,6 +130,16 @@ uint16_t i2cGetErrorCounter(void)
     return i2cErrorCount;
 }
 
+bool i2cWriteBuffer(I2CDevice device, uint8_t addr_, uint8_t reg_, uint8_t len_, uint8_t *data) {
+    // TODO(ryan): implement i2c write buffer
+    UNUSED(device);
+    UNUSED(addr_);
+    UNUSED(reg_);
+    UNUSED(len_);
+    UNUSED(data);
+    return false;
+}
+
 bool i2cWrite(I2CDevice device, uint8_t addr_, uint8_t reg, uint8_t data)
 {
     if (device == I2CINVALID || device > I2CDEV_COUNT) {

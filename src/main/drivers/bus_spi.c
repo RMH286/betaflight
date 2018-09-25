@@ -189,12 +189,14 @@ bool spiBusReadRegisterBuffer(const busDevice_t *bus, uint8_t reg, uint8_t *data
     return spiBusRawReadRegisterBuffer(bus, reg | 0x80, data, length);
 }
 
-void spiBusWriteRegisterBuffer(const busDevice_t *bus, uint8_t reg, const uint8_t *data, uint8_t length)
+bool spiBusWriteRegisterBuffer(const busDevice_t *bus, uint8_t reg, const uint8_t *data, uint8_t length)
 {
     IOLo(bus->busdev_u.spi.csnPin);
     spiTransferByte(bus->busdev_u.spi.instance, reg);
     spiTransfer(bus->busdev_u.spi.instance, data, NULL, length);
     IOHi(bus->busdev_u.spi.csnPin);
+
+    return true;
 }
 
 uint8_t spiBusRawReadRegister(const busDevice_t *bus, uint8_t reg)
