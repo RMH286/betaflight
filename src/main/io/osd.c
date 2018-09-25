@@ -476,8 +476,8 @@ static bool osdDrawSingleElement(uint8_t item)
     switch (item) {
     case OSD_FLIP_ARROW: 
         {
-            const int angleR = attitude.values.roll;
-            const int angleP = attitude.values.pitch; // still gotta update all angleR and angleP pointers.
+            const int angleR = attitude.values.roll / 10;
+            const int angleP = attitude.values.pitch / 10; // still gotta update all angleR and angleP pointers.
             if (IS_RC_MODE_ACTIVE(BOXFLIPOVERAFTERCRASH)) {
                 if (angleP > 0 && ((angleR > 175 && angleR < 180) || (angleR > -180 && angleR < -175))) {
                     buff[0] = SYM_ARROW_SOUTH;
@@ -738,16 +738,8 @@ static bool osdDrawSingleElement(uint8_t item)
         }
 
     case OSD_G_FORCE:
-        {
-            osdGForce = 0.0f;
-            for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++) {
-                const float a = accAverage[axis];
-                osdGForce += a * a;
-            }
-            osdGForce = sqrtf(osdGForce) * acc.dev.acc_1G_rec;
-            tfp_sprintf(buff, "%01d.%01dG", (int)osdGForce, (int)(osdGForce * 10) % 10);
-            break;
-        }
+        tfp_sprintf(buff, "%01d.%01dG", (int)osdGForce, (int)(osdGForce * 10) % 10);
+        break;
 
     case OSD_ROLL_PIDS:
         osdFormatPID(buff, "ROL", &currentPidProfile->pid[PID_ROLL]);
@@ -976,7 +968,7 @@ static bool osdDrawSingleElement(uint8_t item)
             tfp_sprintf(buff, "%c%03d", osdGetDirectionSymbolFromHeading(heading), heading);
             break;
         }
-
+#ifdef USE_VARIO
     case OSD_NUMERICAL_VARIO:
         {
             const int verticalSpeed = osdGetMetersToSelectedUnit(getEstimatedVario());
@@ -984,6 +976,7 @@ static bool osdDrawSingleElement(uint8_t item)
             tfp_sprintf(buff, "%c%01d.%01d", directionSymbol, abs(verticalSpeed / 100), abs((verticalSpeed % 100) / 10));
             break;
         }
+#endif
 
 #ifdef USE_ESC_SENSOR
     case OSD_ESC_TMP:
@@ -1050,6 +1043,12 @@ static void osdDrawElements(void)
     }
 
     if (sensors(SENSOR_ACC)) {
+        osdGForce = 0.0f;
+        for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++) {
+            const float a = accAverage[axis];
+            osdGForce += a * a;
+        }
+        osdGForce = sqrtf(osdGForce) * acc.dev.acc_1G_rec;
         osdDrawSingleElement(OSD_ARTIFICIAL_HORIZON);
         osdDrawSingleElement(OSD_G_FORCE);
     }

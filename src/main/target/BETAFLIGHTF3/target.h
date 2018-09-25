@@ -51,20 +51,22 @@
 
 #define USABLE_TIMER_CHANNEL_COUNT 10
 
-#define MPU6000_CS_PIN          PA15
-#define MPU6000_SPI_INSTANCE    SPI1
+#define GYRO_1_CS_PIN           PA15
+#define GYRO_1_SPI_INSTANCE     SPI1
 
 #define USE_GYRO
 #define USE_GYRO_SPI_MPU6000
-#define GYRO_MPU6000_ALIGN      CW180_DEG
+#define GYRO_1_ALIGN            CW180_DEG
 
 #define USE_ACC
 #define USE_ACC_SPI_MPU6000
-#define ACC_MPU6000_ALIGN       CW180_DEG
+#define ACC_1_ALIGN             CW180_DEG
 
 // MPU6000 interrupts
 #define USE_MPU_DATA_READY_SIGNAL
-#define MPU_INT_EXTI                PC13
+#define USE_EXTI
+#define USE_GYRO_EXTI
+#define GYRO_1_EXTI_PIN             PC13
 #define USE_EXTI
 
 #define REMAP_TIM16_DMA
@@ -118,16 +120,10 @@
 #define MAX7456_RESTORE_CLK     (SPI_CLOCK_FAST)
 
 #define USE_SDCARD
-
 #define SDCARD_DETECT_INVERTED
 #define SDCARD_DETECT_PIN                   PC14
-
 #define SDCARD_SPI_INSTANCE                 SPI2
 #define SDCARD_SPI_CS_PIN                   SPI2_NSS_PIN
-
-#define SDCARD_SPI_INITIALIZATION_CLOCK_DIVIDER 128
-#define SDCARD_SPI_FULL_SPEED_CLOCK_DIVIDER     2
-
 #define SDCARD_DMA_CHANNEL_TX               DMA1_Channel5
 
 #define DEFAULT_VOLTAGE_METER_SOURCE VOLTAGE_METER_ADC

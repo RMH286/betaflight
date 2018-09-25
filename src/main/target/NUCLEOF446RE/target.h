@@ -51,11 +51,8 @@
 #define USE_ACC_SPI_MPU6500
 #define USE_ACC_SPI_MPU9250
 
-#define MPU9250_CS_PIN PB12
-#define MPU9250_SPI_INSTANCE SPI2
-
-#define MPU6500_CS_PIN PB12
-#define MPU6500_SPI_INSTANCE SPI2
+#define GYRO_1_SPI_INSTANCE     SPI2
+#define GYRO_1_CS_PIN           PB12
 
 #define USE_EXTI
 
@@ -76,17 +73,10 @@
 #define USE_CMS
 
 //#define USE_SDCARD
-//
 //#define SDCARD_SPI_INSTANCE     SPI2
 //#define SDCARD_SPI_CS_PIN       PB12
-//// SPI2 is on the APB1 bus whose clock runs at 36MHz. Divide to under 400kHz for init:
-//#define SDCARD_SPI_INITIALIZATION_CLOCK_DIVIDER 128
-//// Divide to under 25MHz for normal operation:
-//#define SDCARD_SPI_FULL_SPEED_CLOCK_DIVIDER 2
-//
 //// Note, this is the same DMA channel as UART1_RX. Luckily we don't use DMA for USART Rx.
 //#define SDCARD_DMA_CHANNEL_TX               DMA1_Channel5
-
 // Performance logging for SD card operations:
 // #define AFATFS_USE_INTROSPECTIVE_LOGGING
 

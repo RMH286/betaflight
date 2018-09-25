@@ -20,7 +20,7 @@
 
 #pragma once
 
-//#define USE_TARGET_CONFIG
+#define USE_TARGET_CONFIG
 
 #ifdef KAKUTEF7V2
 #define TARGET_BOARD_IDENTIFIER "KT76"
@@ -40,26 +40,24 @@
 #define BEEPER_PIN              PD15
 #define BEEPER_INVERTED
 
+//define camera control
+#define CAMERA_CONTROL_PIN      PE13
+
 #define USE_ACC
 #define USE_GYRO
+#define USE_EXTI
 
 // ICM-20689
 #define USE_ACC_SPI_ICM20689
 #define USE_GYRO_SPI_ICM20689
-#define GYRO_ICM20689_ALIGN      CW270_DEG
-#define ACC_ICM20689_ALIGN       CW270_DEG
-#define MPU_INT_EXTI               PE1
+#define GYRO_1_CS_PIN           SPI4_NSS_PIN
+#define GYRO_1_SPI_INSTANCE     SPI4
+#define GYRO_1_ALIGN            CW270_DEG
+#define ACC_1_ALIGN             CW270_DEG
 
-#define ICM20689_CS_PIN          SPI4_NSS_PIN
-#define ICM20689_SPI_INSTANCE    SPI4
-#define GYRO_1_CS_PIN            ICM20689_CS_PIN
-#define GYRO_1_SPI_INSTANCE      ICM20689_SPI_INSTANCE
-
-#define ACC_1_ALIGN              ACC_ICM20689_ALIGN
-#define GYRO_1_ALIGN             GYRO_ICM20689_ALIGN
-
+#define USE_GYRO_EXTI
+#define GYRO_1_EXTI_PIN         PE1
 #define USE_MPU_DATA_READY_SIGNAL
-#define USE_EXTI
 
 #define USE_VCP
 #define USE_USB_DETECT
@@ -127,14 +125,8 @@
 #define USE_SDCARD
 #define SDCARD_DETECT_INVERTED
 #define SDCARD_DETECT_PIN                   PD8
-
 #define SDCARD_SPI_INSTANCE                 SPI1
 #define SDCARD_SPI_CS_PIN                   SPI1_NSS_PIN
-
-#define SDCARD_SPI_INITIALIZATION_CLOCK_DIVIDER 256 // 422kHz
-
-#define SDCARD_SPI_FULL_SPEED_CLOCK_DIVIDER      8 // 27MHz
-
 #define SDCARD_DMA_STREAM_TX_FULL             DMA2_Stream5
 #define SDCARD_DMA_CHANNEL                    3
 
@@ -151,6 +143,7 @@
 #define USE_MAG
 #define USE_MAG_HMC5883
 #define USE_MAG_QMC5883
+#define USE_MAG_LIS3MDL
 #define MAG_I2C_INSTANCE      I2C_DEVICE
 
 #define SENSORS_SET (SENSOR_ACC | SENSOR_BARO)
@@ -169,7 +162,6 @@
 #define DEFAULT_RX_FEATURE      FEATURE_RX_SERIAL
 #define SERIALRX_UART           SERIAL_PORT_USART6
 #define SERIALRX_PROVIDER       SERIALRX_SBUS
-#define ESC_SENSOR_UART         SERIAL_PORT_USART7
 
 #define USE_SERIAL_4WAY_BLHELI_INTERFACE
 
@@ -182,4 +174,3 @@
 #define USABLE_TIMER_CHANNEL_COUNT 8
 
 #define USED_TIMERS  ( TIM_N(1) | TIM_N(5) | TIM_N(3) | TIM_N(4) | TIM_N(8) )
-

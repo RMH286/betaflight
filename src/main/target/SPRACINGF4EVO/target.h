@@ -27,7 +27,7 @@
 #define SPRACINGF4EVO_REV 2
 #endif
 #ifdef SPRACINGF4EVODG
-#define USE_DUAL_GYRO
+#define USE_MULTI_GYRO
 #endif
 
 #define USBD_PRODUCT_STRING     "SP Racing F4 EVO"
@@ -41,11 +41,11 @@
 #define INVERTER_PIN_UART2      PB2
 
 #define USE_EXTI
+#define USE_GYRO_EXTI
 #define GYRO_1_EXTI_PIN         PC13
-#ifdef USE_DUAL_GYRO
+#ifdef USE_MULTI_GYRO
 #define GYRO_2_EXTI_PIN         PC5 // GYRO 2 / NC on prototype boards, but if it was it'd be here.
 #endif
-#define MPU_INT_EXTI
 
 #ifndef SPRACINGF4EVODG
 #define USE_MPU_DATA_READY_SIGNAL
@@ -62,20 +62,14 @@
 #define USE_ACC
 #define USE_ACC_SPI_MPU6500
 
-#ifndef USE_DUAL_GYRO
-#define ACC_MPU6500_ALIGN           CW0_DEG
-#define GYRO_MPU6500_ALIGN          CW0_DEG
+#ifndef USE_MULTI_GYRO
+#define ACC_1_ALIGN                 CW0_DEG
+#define GYRO_1_ALIGN                CW0_DEG
 #else
-#define ACC_MPU6500_1_ALIGN         CW0_DEG
-#define GYRO_MPU6500_1_ALIGN        CW0_DEG
-
-#define ACC_MPU6500_2_ALIGN         CW0_DEG
-#define GYRO_MPU6500_2_ALIGN        CW0_DEG
-
-#define GYRO_1_ALIGN                GYRO_MPU6500_1_ALIGN
-#define GYRO_2_ALIGN                GYRO_MPU6500_2_ALIGN
-#define ACC_1_ALIGN                 ACC_MPU6500_1_ALIGN
-#define ACC_2_ALIGN                 ACC_MPU6500_2_ALIGN
+#define GYRO_1_ALIGN                CW0_DEG
+#define GYRO_2_ALIGN                CW0_DEG
+#define ACC_1_ALIGN                 CW0_DEG
+#define ACC_2_ALIGN                 CW0_DEG
 #endif
 
 #define USE_BARO
@@ -86,6 +80,7 @@
 #define USE_MAG_AK8975
 #define USE_MAG_HMC5883
 #define USE_MAG_QMC5883
+#define USE_MAG_LIS3MDL
 
 #define USE_VCP
 #define USE_UART1
@@ -153,23 +148,16 @@
 #endif
 
 #define USE_SDCARD
-
 #define SDCARD_DETECT_INVERTED
 #define SDCARD_DETECT_PIN                   PC14
-
 #define SDCARD_SPI_INSTANCE                 SPI2
 #define SDCARD_SPI_CS_PIN                   SPI2_NSS_PIN
-
-// SPI3 is on the APB1 bus whose clock runs at 84MHz. Divide to under 400kHz for init:
-#define SDCARD_SPI_INITIALIZATION_CLOCK_DIVIDER 256 // 328kHz
-// Divide to under 25MHz for normal operation:
-#define SDCARD_SPI_FULL_SPEED_CLOCK_DIVIDER     4 // 21MHz
 #define SDCARD_DMA_CHANNEL_TX               DMA1_Stream4
 #define SDCARD_DMA_CHANNEL                  0
 
-#ifndef USE_DUAL_GYRO
-#define MPU6500_CS_PIN          SPI1_NSS_PIN
-#define MPU6500_SPI_INSTANCE    SPI1
+#ifndef USE_MULTI_GYRO
+#define GYRO_1_CS_PIN           SPI1_NSS_PIN
+#define GYRO_1_SPI_INSTANCE     SPI1
 #else
 #define GYRO_1_CS_PIN           SPI1_NSS_PIN
 #define GYRO_1_SPI_INSTANCE     SPI1
