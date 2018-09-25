@@ -141,6 +141,16 @@ void spiResetErrorCounter(SPI_TypeDef *instance)
     }
 }
 
+bool spiBusWriteRegisterBuffer(const busDevice_t *bus, uint8_t reg, uint8_t *data, uint8_t length)
+{
+    IOLo(bus->busdev_u.spi.csnPin);
+    spiTransferByte(bus->busdev_u.spi.instance, reg);
+    spiTransfer(bus->busdev_u.spi.instance, NULL, data, length);
+    IOHi(bus->busdev_u.spi.csnPin);
+
+    return true;
+}
+
 bool spiBusWriteRegister(const busDevice_t *bus, uint8_t reg, uint8_t data)
 {
     IOLo(bus->busdev_u.spi.csnPin);

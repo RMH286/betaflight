@@ -114,7 +114,9 @@ SPI_TypeDef *spiInstanceByDevice(SPIDevice device);
 
 bool spiBusTransfer(const busDevice_t *bus, const uint8_t *txData, uint8_t *rxData, int length);
 
+bool spiBusWriteRegisterBuffer(const busDevice_t *bus, uint8_t reg, uint8_t *data, uint8_t length);
 bool spiBusWriteRegister(const busDevice_t *bus, uint8_t reg, uint8_t data);
+// TODO(ryan): switch to return bool like other spi functions
 bool spiBusReadRegisterBuffer(const busDevice_t *bus, uint8_t reg, uint8_t *data, uint8_t length);
 uint8_t spiBusReadRegister(const busDevice_t *bus, uint8_t reg);
 void spiBusSetInstance(busDevice_t *bus, SPI_TypeDef *instance);

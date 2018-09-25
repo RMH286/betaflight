@@ -64,6 +64,6 @@ bool rangefinderInit(void);
 int32_t rangefinderGetLatestAltitude(void);
 int32_t rangefinderGetLatestRawAltitude(void);
 
-void rangefinderUpdate(timeUs_t currentTimeUs);
+timeDelta_t rangefinderUpdate(timeUs_t currentTimeUs);
 bool rangefinderProcess(float cosTiltAngle);
 bool rangefinderIsHealthy(void);
