@@ -57,26 +57,29 @@
 //#define BEEPER_INVERTED
 
 #define USE_EXTI
-#define MPU_INT_EXTI PC13
+#define USE_GYRO_EXTI
+#define GYRO_1_EXTI_PIN         PC13
 #define USE_MPU_DATA_READY_SIGNAL
 
-#define MPU6000_SPI_INSTANCE    SPI1
-#define MPU6000_CS_PIN          PA4
+#define GYRO_1_SPI_INSTANCE     SPI1
+#define GYRO_1_CS_PIN           PA4
 
 #define USE_GYRO
 #define USE_GYRO_SPI_MPU6000
 // double check (layout is not done yet)
-#define GYRO_MPU6000_ALIGN      CW90_DEG
+#define GYRO_1_ALIGN            CW90_DEG
 
 #define USE_ACC
 #define USE_ACC_SPI_MPU6000
 // double check (layout is not done yet)
-#define ACC_MPU6000_ALIGN       CW90_DEG
+#define ACC_1_ALIGN             CW90_DEG
 
 #define USE_RANGEFINDER
 #define USE_RANGEFINDER_VL53L0X
 
 #define USE_VCP
+#define USBD_PRODUCT_STRING "hoverbot"
+
 #define USE_UART3
 
 #define SERIAL_PORT_COUNT       2
@@ -84,11 +87,11 @@
 #define UART3_TX_PIN            PB10
 #define UART3_RX_PIN            PB11
 
-#define USE_I2C
-#define USE_I2C_DEVICE_1
-#define I2C1_SCL                PB8
-#define I2C1_SDA                PB9
-#define I2C_DEVICE              (I2CDEV_1)
+// #define USE_I2C
+// #define USE_I2C_DEVICE_1
+// #define I2C1_SCL                PB6
+// #define I2C1_SDA                PB7
+// #define I2C_DEVICE              (I2CDEV_1)
 
 #define USE_SPI
 #define USE_SPI_DEVICE_1
@@ -105,34 +108,39 @@
 #define SPI2_MISO_PIN           PB14
 #define SPI2_MOSI_PIN           PB15
 
-// OSD define info:
-//   feature name (includes source) -> MAX_OSD, used in target.mk
-
 #define USE_MAX7456
 #define MAX7456_SPI_INSTANCE    SPI2
 #define MAX7456_SPI_CS_PIN      PB12
 #define MAX7456_SPI_CLK         (SPI_CLOCK_STANDARD) // 10MHz
 #define MAX7456_RESTORE_CLK     (SPI_CLOCK_FAST)
 
-// Performance logging for SD card operations:
-// #define AFATFS_USE_INTROSPECTIVE_LOGGING
-
 #define USE_ADC
 #define DEFAULT_VOLTAGE_METER_SOURCE VOLTAGE_METER_ADC
 #define DEFAULT_CURRENT_METER_SOURCE CURRENT_METER_ADC
 #define VBAT_ADC_PIN                PB1
 #define CURRENT_METER_ADC_PIN       PB0
-#define ADC_INSTANCE                ADC1
+#define ADC_INSTANCE                ADC3
+#define VBAT_SCALE_DEFAULT          100
+
+#define CURRENT_TARGET_CPU_VOLTAGE 3.0
+
+// board uses an ina139, RL=0.005, Rs=30000
+// V/A = (0.005 * 0.001 * 30000) * I
+// rescale to 1/10th mV / A -> * 1000 * 10
+// use 3.0V as cpu and adc voltage -> rescale by 3.0/3.3
+#define CURRENT_METER_SCALE_DEFAULT    (0.005 * 0.001 * 30000) * 1000 * 10 * (CURRENT_TARGET_CPU_VOLTAGE / 3.3)
+#define CURRENT_METER_OFFSET_DEFAULT   0
 
 #define DEFAULT_RX_FEATURE      FEATURE_RX_PPM
 #define DEFAULT_FEATURES        (FEATURE_OSD)
+//#define USE_TARGET_CONFIG
 
 #define USE_SERIAL_4WAY_BLHELI_INTERFACE
 
-#define TARGET_IO_PORTA         (BIT(2)|BIT(3)|BIT(4)|BIT(5)|BIT(6)|BIT(7)|BIT(8)|BIT(11)|BIT(12)|BIT(13)|BIT(14)|BIT(15))
-#define TARGET_IO_PORTB         (BIT(0)|BIT(1)|BIT(4)|BIT(5)|BIT(6)|BIT(7)|BIT(8)|BIT(9)|BIT(10)|BIT(11)|BIT(12)|BIT(13)|BIT(14)|BIT(15))
+#define TARGET_IO_PORTA         0xffff
+#define TARGET_IO_PORTB         0xffff
 #define TARGET_IO_PORTC         (BIT(13)|BIT(14)|BIT(15))
-#define TARGET_IO_PORTF         (BIT(0)|BIT(1))
+#define TARGET_IO_PORTF         (BIT(0)|BIT(1)|BIT(4))
 
-#define USABLE_TIMER_CHANNEL_COUNT 8 // PPM + 6 Outputs (2 shared with UART3)
-#define USED_TIMERS             (TIM_N(1) | TIM_N(2) | TIM_N(3) | TIM_N(4) | TIM_N(8) | TIM_N(15))
+#define USABLE_TIMER_CHANNEL_COUNT 5
+#define USED_TIMERS             (TIM_N(1) | TIM_N(2) | TIM_N(4) | TIM_N(8))
